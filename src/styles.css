@@ -1,0 +1,178 @@
+@import "tailwindcss" source(none);
+@source "../src";
+
+/* pdf.js text layer — used by the annotation editor for real text selection. */
+.textLayer {
+  position: absolute;
+  text-align: initial;
+  overflow: hidden;
+  opacity: 1;
+  line-height: 1;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+  forced-color-adjust: none;
+  transform-origin: 0 0;
+  caret-color: transparent;
+  z-index: 2;
+}
+.textLayer span,
+.textLayer br {
+  color: transparent;
+  position: absolute;
+  white-space: pre;
+  cursor: text;
+  transform-origin: 0 0;
+}
+.textLayer span.markedContent {
+  top: 0;
+  height: 0;
+}
+.textLayer ::selection {
+  background: rgba(0, 100, 255, 0.3);
+}
+
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * iEduPDF V2 design system.
+ * Modern iEdu blue, clean typography, generous spacing.
+ * All colors defined here as oklch tokens. Never hardcode colors in components.
+ */
+
+@theme inline {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+
+  --shadow-soft: 0 1px 2px 0 oklch(0.2 0.05 250 / 0.04), 0 1px 3px 0 oklch(0.2 0.05 250 / 0.06);
+  --shadow-elevated: 0 4px 12px -2px oklch(0.2 0.05 250 / 0.08), 0 2px 4px -2px oklch(0.2 0.05 250 / 0.06);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  --background: oklch(0.995 0.002 240);
+  --foreground: oklch(0.19 0.03 250);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.19 0.03 250);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.19 0.03 250);
+
+  /* iEdu blue */
+  --primary: oklch(0.52 0.18 255);
+  --primary-foreground: oklch(0.99 0.005 240);
+  --primary-soft: oklch(0.96 0.03 255);
+
+  --brand: oklch(0.52 0.18 255);
+  --brand-foreground: oklch(0.99 0.005 240);
+
+  --secondary: oklch(0.96 0.01 250);
+  --secondary-foreground: oklch(0.22 0.04 255);
+
+  --muted: oklch(0.97 0.005 250);
+  --muted-foreground: oklch(0.52 0.02 255);
+
+  --accent: oklch(0.96 0.03 255);
+  --accent-foreground: oklch(0.34 0.14 255);
+
+  --destructive: oklch(0.58 0.22 27);
+  --destructive-foreground: oklch(0.99 0.005 240);
+
+  --success: oklch(0.65 0.16 155);
+  --success-foreground: oklch(0.99 0.005 240);
+
+  --warning: oklch(0.78 0.16 75);
+  --warning-foreground: oklch(0.2 0.05 60);
+
+  --border: oklch(0.92 0.008 250);
+  --input: oklch(0.92 0.008 250);
+  --ring: oklch(0.52 0.18 255);
+}
+
+.dark {
+  --background: oklch(0.16 0.02 255);
+  --foreground: oklch(0.97 0.005 240);
+  --card: oklch(0.21 0.03 255);
+  --card-foreground: oklch(0.97 0.005 240);
+  --popover: oklch(0.21 0.03 255);
+  --popover-foreground: oklch(0.97 0.005 240);
+  --primary: oklch(0.68 0.16 255);
+  --primary-foreground: oklch(0.15 0.03 255);
+  --primary-soft: oklch(0.28 0.06 255);
+  --brand: oklch(0.68 0.16 255);
+  --brand-foreground: oklch(0.15 0.03 255);
+  --secondary: oklch(0.26 0.03 255);
+  --secondary-foreground: oklch(0.97 0.005 240);
+  --muted: oklch(0.24 0.02 255);
+  --muted-foreground: oklch(0.7 0.02 255);
+  --accent: oklch(0.28 0.06 255);
+  --accent-foreground: oklch(0.9 0.03 255);
+  --destructive: oklch(0.62 0.2 27);
+  --destructive-foreground: oklch(0.97 0.005 240);
+  --success: oklch(0.7 0.15 155);
+  --success-foreground: oklch(0.15 0.03 255);
+  --warning: oklch(0.78 0.16 75);
+  --warning-foreground: oklch(0.2 0.05 60);
+  --border: oklch(0.3 0.02 255);
+  --input: oklch(0.3 0.02 255);
+  --ring: oklch(0.68 0.16 255);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html, body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}

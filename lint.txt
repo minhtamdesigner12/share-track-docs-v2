@@ -1,0 +1,384 @@
+
+> lint
+> eslint
+
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/Combination-oXASthiv.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/Combination-oXASthiv.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/PdfPageCanvas-ZDLW5iVw.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/PdfPageCanvas-ZDLW5iVw.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/analytics._docId-BOMkORLL.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/analytics._docId-BOMkORLL.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/arrow-left-DobN9CE3.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/arrow-left-DobN9CE3.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/auth-B8acW3EL.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/auth-B8acW3EL.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/auth-middleware-CvpqUr4M.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/auth-middleware-CvpqUr4M.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/button-D0OLt1IY.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/button-D0OLt1IY.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/chart-column-7xR4GUW9.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/chart-column-7xR4GUW9.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/chevron-right-xFWKrX2K.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/chevron-right-xFWKrX2K.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/compress-Cw4MxZ5t.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/compress-Cw4MxZ5t.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/dashboard-zzAtomKU.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/dashboard-zzAtomKU.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/dist-BmyvG32M.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/dist-BmyvG32M.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/dist-X5vLI9Pg.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/dist-X5vLI9Pg.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/download-7CqWQa9Y.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/download-7CqWQa9Y.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/edit-DzSIk0cl.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/edit-DzSIk0cl.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/es-xm_a1Qxj.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/es-xm_a1Qxj.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/export-3aNnJ8yb.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/export-3aNnJ8yb.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/file-pen-Fypew_ZC.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/file-pen-Fypew_ZC.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/file-text-CQn34vQ5.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/file-text-CQn34vQ5.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/formatDistanceToNow-C9y6yhHy.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/formatDistanceToNow-C9y6yhHy.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/guest-pdf-store-BXCfW5bu.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/guest-pdf-store-BXCfW5bu.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/images-to-pdf-h2SsSB9h.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/images-to-pdf-h2SsSB9h.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/images-w4XzLmvQ.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/images-w4XzLmvQ.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/index-BM2_WPf5.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/index-BM2_WPf5.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/label-YtX3IYHK.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/label-YtX3IYHK.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/link-CUZv-laS.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/link-CUZv-laS.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/loader-BL7C-GRi.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/loader-BL7C-GRi.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/matchContext-DcmkPtE7.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/matchContext-DcmkPtE7.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/minimize-2-CHQ62t9E.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/minimize-2-CHQ62t9E.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/pdf-CDr6uObW.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/pdf-CDr6uObW.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/pdf.functions-BRE6xZG0.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/pdf.functions-BRE6xZG0.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/pdf.worker.min-C8Ts8bNu.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/pdf.worker.min-C8Ts8bNu.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/progress-C6wB_0Bj.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/progress-C6wB_0Bj.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/qss-Bqk2G4CH.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/qss-Bqk2G4CH.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/redirect-Dhm19zUi.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/redirect-Dhm19zUi.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/route-BrKMgXNG.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/route-BrKMgXNG.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/routes-BSaWeomE.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/routes-BSaWeomE.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/share-2-qnqlwoap.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/share-2-qnqlwoap.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/share.functions-BTHDHre8.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/share.functions-BTHDHre8.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/site-header-Bx6E4i29.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/site-header-Bx6E4i29.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/sortable.esm-C-SRPE5I.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/sortable.esm-C-SRPE5I.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/trash-2-usCx1bBx.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/trash-2-usCx1bBx.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/undo-2-DADm66d9.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/undo-2-DADm66d9.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/upload-CN9ZeHRN.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/upload-CN9ZeHRN.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/useQuery-o3OlEgoj.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/useQuery-o3OlEgoj.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/useStore-B9WcefOa.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/useStore-B9WcefOa.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/view._slug-D2d7wgcV.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/view._slug-D2d7wgcV.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/.output/public/assets/workspace._docId-BxTNzPmA.js
+  0:0  error  Parsing error: "parserOptions.project" has been provided for @typescript-eslint/parser.
+The file was not found in any of the provided project(s): .output/public/assets/workspace._docId-BxTNzPmA.js
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/pdf-upload.tsx
+  71:60  error  This assertion is unnecessary since it does not change the type of the expression  @typescript-eslint/no-unnecessary-type-assertion
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/share-track-dialog.tsx
+   83:5   error  Definition for rule 'react-hooks/exhaustive-deps' was not found                    react-hooks/exhaustive-deps
+  140:23  error  This assertion is unnecessary since it does not change the type of the expression  @typescript-eslint/no-unnecessary-type-assertion
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/site-header.tsx
+  16:23  error  Unnecessary optional chain on a non-nullish value  @typescript-eslint/no-unnecessary-condition
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/alert.tsx
+  2:15  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/badge.tsx
+  2:15  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/button.tsx
+  3:15  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/calendar.tsx
+    5:1   error    Imports "DayButton" are only used as type                               @typescript-eslint/consistent-type-imports
+  108:18  warning  'className' is already declared in the upper scope on line 11 column 3  no-shadow
+  108:41  warning  'props' is already declared in the upper scope on line 18 column 6      no-shadow
+  111:21  warning  'className' is already declared in the upper scope on line 11 column 3  no-shadow
+  111:48  warning  'props' is already declared in the upper scope on line 18 column 6      no-shadow
+  123:37  warning  'props' is already declared in the upper scope on line 18 column 6      no-shadow
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/carousel.tsx
+    2:28  error    Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+   55:39  warning  'api' is already declared in the upper scope on line 45 column 23            no-shadow
+  103:10  error    Unnecessary optional chain on a non-nullish value                            @typescript-eslint/no-unnecessary-condition
+  113:22  error    Unnecessary conditional, value is always truthy                              @typescript-eslint/no-unnecessary-condition
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/chart.tsx
+   65:57  warning  'config' is already declared in the upper scope on line 64 column 27                          no-shadow
+  136:20  error    This assertion is unnecessary since it does not change the type of the expression             @typescript-eslint/no-unnecessary-type-assertion
+  136:49  error    Unnecessary optional chain on a non-nullish value                                             @typescript-eslint/no-unnecessary-condition
+  312:22  error    This assertion is unnecessary since the receiver accepts the original type of the expression  @typescript-eslint/no-unnecessary-type-assertion
+  318:22  error    This assertion is unnecessary since the receiver accepts the original type of the expression  @typescript-eslint/no-unnecessary-type-assertion
+  321:69  error    This assertion is unnecessary since it does not change the type of the expression             @typescript-eslint/no-unnecessary-type-assertion
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/command.tsx
+  4:1  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/form.tsx
+    2:1   error  All imports in the declaration are only used as types. Use `import type`     @typescript-eslint/consistent-type-imports
+    8:3   error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+    9:3   error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+   10:3   error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+  143:36  error  Unnecessary optional chain on a non-nullish value                            @typescript-eslint/no-unnecessary-condition
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/label.tsx
+  5:15  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/pagination.tsx
+  5:1  error  Imports "ButtonProps" are only used as type  @typescript-eslint/consistent-type-imports
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/sheet.tsx
+  5:15  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/sidebar.tsx
+   3:15  error    Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+  93:40  warning  'open' is already declared in the upper scope on line 75 column 11           no-shadow
+  93:67  warning  'open' is already declared in the upper scope on line 75 column 11           no-shadow
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/toggle-group.tsx
+  5:1  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/components/ui/toggle.tsx
+  3:15  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/integrations/supabase/auth-middleware.ts
+  51:9   error  Unnecessary conditional, value is always falsy                                     @typescript-eslint/no-unnecessary-condition
+  51:17  error  Unnecessary optional chain on a non-nullish value                                  @typescript-eslint/no-unnecessary-condition
+  75:7   error  This assertion is unnecessary since it does not change the type of the expression  @typescript-eslint/no-unnecessary-type-assertion
+  76:7   error  This assertion is unnecessary since it does not change the type of the expression  @typescript-eslint/no-unnecessary-type-assertion
+  79:38  error  This assertion is unnecessary since it does not change the type of the expression  @typescript-eslint/no-unnecessary-type-assertion
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/integrations/supabase/types.ts
+  357:3  error  Type Parameter name `DefaultSchemaTableNameOrOptions` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u   @typescript-eslint/naming-convention
+  360:3  error  Type Parameter name `TableName` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u                         @typescript-eslint/naming-convention
+  386:3  error  Type Parameter name `DefaultSchemaTableNameOrOptions` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u   @typescript-eslint/naming-convention
+  389:3  error  Type Parameter name `TableName` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u                         @typescript-eslint/naming-convention
+  411:3  error  Type Parameter name `DefaultSchemaTableNameOrOptions` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u   @typescript-eslint/naming-convention
+  414:3  error  Type Parameter name `TableName` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u                         @typescript-eslint/naming-convention
+  436:3  error  Type Parameter name `DefaultSchemaEnumNameOrOptions` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u    @typescript-eslint/naming-convention
+  439:3  error  Type Parameter name `EnumName` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u                          @typescript-eslint/naming-convention
+  453:3  error  Type Parameter name `PublicCompositeTypeNameOrOptions` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u  @typescript-eslint/naming-convention
+  456:3  error  Type Parameter name `CompositeTypeName` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u                 @typescript-eslint/naming-convention
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/lib/error-capture.ts
+  12:59  error  This assertion is unnecessary since it does not change the type of the expression  @typescript-eslint/no-unnecessary-type-assertion
+  14:13  error  This assertion is unnecessary since it does not change the type of the expression  @typescript-eslint/no-unnecessary-type-assertion
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/lib/pdf.functions.ts
+  17:12  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/lib/share.functions.ts
+   91:17  error  Unnecessary conditional, value is always falsy                                                      @typescript-eslint/no-unnecessary-condition
+  127:18  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  140:17  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  149:13  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  190:17  error  Unnecessary conditional, value is always falsy                                                      @typescript-eslint/no-unnecessary-condition
+  241:13  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/lib/utils.ts
+  1:16  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/lib/viewer.functions.ts
+  54:17  error  Unnecessary conditional, value is always falsy                                                      @typescript-eslint/no-unnecessary-condition
+  54:42  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  54:46  error  Unnecessary optional chain on a non-nullish value                                                   @typescript-eslint/no-unnecessary-condition
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/modules/pdf-doc/AnnotationLayer.tsx
+  213:7  error  Unnecessary conditional, value is always falsy  @typescript-eslint/no-unnecessary-condition
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/modules/pdf-doc/TextLayer.tsx
+  41:32  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  45:11  error  Unnecessary conditional, value is always falsy                                                      @typescript-eslint/no-unnecessary-condition
+  49:74  error  Shorthand method signature is forbidden. Use a function property instead                            @typescript-eslint/method-signature-style
+  57:11  error  Unnecessary conditional, value is always falsy                                                      @typescript-eslint/no-unnecessary-condition
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/modules/pdf-doc/export.ts
+   24:12  error  `import()` type annotations are forbidden                                              @typescript-eslint/consistent-type-imports
+   26:9   error  `import()` type annotations are forbidden                                              @typescript-eslint/consistent-type-imports
+   58:16  error  Unnecessary conditional, comparison is always true, since `"note" === "note"` is true  @typescript-eslint/no-unnecessary-condition
+  106:38  error  `import()` type annotations are forbidden                                              @typescript-eslint/consistent-type-imports
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/modules/pdf-doc/store.tsx
+  118:15  error  This assertion is unnecessary since the receiver accepts the original type of the expression  @typescript-eslint/no-unnecessary-type-assertion
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/modules/pdf-render/PdfPageCanvas.tsx
+   66:5   error  Definition for rule 'react-hooks/exhaustive-deps' was not found                                     react-hooks/exhaustive-deps
+   74:11  error  Unnecessary conditional, value is always falsy                                                      @typescript-eslint/no-unnecessary-condition
+   79:32  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+   90:11  error  Unnecessary conditional, value is always truthy                                                     @typescript-eslint/no-unnecessary-condition
+  100:5   error  Definition for rule 'react-hooks/exhaustive-deps' was not found                                     react-hooks/exhaustive-deps
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/modules/pdf-render/loader.ts
+  13:28  error  Type Parameter name `K` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u  @typescript-eslint/naming-convention
+  13:31  error  Type Parameter name `V` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u  @typescript-eslint/naming-convention
+  16:43  error  Type Parameter name `K` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u  @typescript-eslint/naming-convention
+  16:46  error  Type Parameter name `V` must match the RegExp: /^(T|T[A-Z][A-Za-z]+)$/u  @typescript-eslint/naming-convention
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/routes/__root.tsx
+   1:1   error  Imports "QueryClient" are only used as type                                  @typescript-eslint/consistent-type-imports
+  10:21  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/routes/_authenticated/analytics.$docId.tsx
+  152:52  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  155:46  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+  339:35  error  Unnecessary optional chain on a non-nullish value                                                   @typescript-eslint/no-unnecessary-condition
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/routes/_authenticated/route.tsx
+  8:18  error  Unnecessary conditional, value is always falsy  @typescript-eslint/no-unnecessary-condition
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/routes/compress.tsx
+  24:3  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+  25:3  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/routes/edit.tsx
+   28:3  error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+  101:5  error  Definition for rule 'react-hooks/exhaustive-deps' was not found              react-hooks/exhaustive-deps
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/routes/images-to-pdf.tsx
+   22:3   error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+   40:3   error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+   41:3   error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+   42:3   error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+   43:3   error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+   44:3   error  Prefer using a top-level type-only import instead of inline type specifiers  import/consistent-type-specifier-style
+   88:5   error  Definition for rule 'react-hooks/exhaustive-deps' was not found              react-hooks/exhaustive-deps
+  274:23  error  Unnecessary conditional, value is always truthy                              @typescript-eslint/no-unnecessary-condition
+  297:27  error  Unnecessary conditional, value is always truthy                              @typescript-eslint/no-unnecessary-condition
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/routes/view.$slug.tsx
+   97:5   error  Definition for rule 'react-hooks/exhaustive-deps' was not found  react-hooks/exhaustive-deps
+  117:60  error  Definition for rule 'react-hooks/exhaustive-deps' was not found  react-hooks/exhaustive-deps
+
+/Users/tamnm/Documents/share-track-docs-v2/share-track-docs-clean/src/server.ts
+   1:8   error  './lib/error-capture' imported multiple times                                                       import/no-duplicates
+   3:42  error  './lib/error-capture' imported multiple times                                                       import/no-duplicates
+  15:15  error  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+
+✖ 156 problems (147 errors, 9 warnings)
+  42 errors and 0 warnings potentially fixable with the `--fix` option.
+
