@@ -2,11 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { formatDistanceToNow } from "date-fns";
-import { BarChart3, FileText, MoreHorizontal, Trash2 } from "lucide-react";
+import { BarChart3, FileText, MoreHorizontal, Trash2, Users, Percent } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { PdfUpload } from "@/components/pdf-upload";
 import { Button } from "@/components/ui/button";
 import { listMyDocuments, deleteDocument } from "@/lib/pdf.functions";
+import { getDashboardStats } from "@/lib/share.functions";
 import { toast } from "sonner";
 import {
   DropdownMenu,
@@ -28,11 +29,20 @@ function formatBytes(n: number) {
 function Dashboard() {
   const listFn = useServerFn(listMyDocuments);
   const deleteFn = useServerFn(deleteDocument);
+  const statsFn = useServerFn(getDashboardStats);
   const qc = useQueryClient();
 
   const { data: docs, isLoading } = useQuery({
     queryKey: ["docs"],
     queryFn: () => listFn(),
+  });
+
+  const docIds = docs?.map((d) => d.id) ?? [];
+  const { data: stats } = useQuery({
+    queryKey: ["dashboard-stats", docIds],
+    queryFn: () => statsFn({ data: { documentIds: docIds } }),
+    enabled: docIds.length > 0,
+    refetchInterval: 30_000,
   });
 
   const del = useMutation({
@@ -69,7 +79,9 @@ function Dashboard() {
             </div>
           ) : (
             <div className="mt-4 divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
-              {docs.map((d) => (
+              {docs.map((d) => {
+                const s = stats?.[d.id];
+                return (
                 <div key={d.id} className="flex items-center gap-4 px-4 py-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-soft text-brand">
                     <FileText className="h-5 w-5" />
@@ -84,7 +96,39 @@ function Dashboard() {
                     </Link>
                     <div className="text-xs text-muted-foreground">
                       {d.page_count} pages · {formatBytes(d.size_bytes)} ·{" "}
-                      {formatDistanceToNow(new Date(d.updated_at), { addSuffix: true })}
+                      Uploaded {formatDistanceToNow(new Date(d.created_at), { addSuffix: true })}
+                    </div>
+                  </div>
+                  <div className="hidden shrink-0 gap-4 text-xs text-muted-foreground sm:flex">
+                    <div>
+                      <div className="flex items-center gap-1 text-[10px] uppercase tracking-wide">
+                        <Users className="h-3 w-3" /> Viewers
+                      </div>
+                      <div className="font-semibold text-foreground">
+                        {s ? s.uniqueViewers : "–"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] uppercase tracking-wide">Sessions</div>
+                      <div className="font-semibold text-foreground">
+                        {s ? s.totalSessions : "–"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1 text-[10px] uppercase tracking-wide">
+                        <Percent className="h-3 w-3" /> Completion
+                      </div>
+                      <div className="font-semibold text-foreground">
+                        {s && s.totalSessions > 0 ? `${s.avgCompletion.toFixed(0)}%` : "–"}
+                      </div>
+                    </div>
+                    <div className="w-24">
+                      <div className="text-[10px] uppercase tracking-wide">Last viewed</div>
+                      <div className="font-semibold text-foreground">
+                        {s?.lastViewed
+                          ? formatDistanceToNow(new Date(s.lastViewed), { addSuffix: true })
+                          : "Never"}
+                      </div>
                     </div>
                   </div>
                   <Button asChild variant="ghost" size="sm">
@@ -113,7 +157,8 @@ function Dashboard() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

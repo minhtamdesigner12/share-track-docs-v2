@@ -8,6 +8,7 @@ import {
   FileText,
   Loader2,
   Lock,
+  Mail,
   Maximize2,
 } from "lucide-react";
 import { PdfPageCanvas } from "@/modules/pdf-render/PdfPageCanvas";
@@ -51,30 +52,44 @@ function PublicViewer() {
 
   const [status, setStatus] = useState<
     | { kind: "loading" }
+    | { kind: "lead"; error?: string }
     | { kind: "password"; wrong?: boolean }
     | { kind: "error"; message: string }
     | { kind: "ready"; data: ResolvedOk; sessionId: string }
   >({ kind: "loading" });
   const [password, setPassword] = useState("");
   const [pwSubmitting, setPwSubmitting] = useState(false);
+  const [leadName, setLeadName] = useState("");
+  const [leadEmail, setLeadEmail] = useState("");
+  const [leadSubmitting, setLeadSubmitting] = useState(false);
   const [page, setPage] = useState(0);
   const trackerRef = useRef<ReturnType<typeof createViewerTracker> | null>(null);
 
   async function tryResolve(pwd?: string) {
-    const res = await resolveFn({ data: { slug, password: pwd } });
+    const res = await resolveFn({
+      data: {
+        slug,
+        password: pwd,
+        leadName: leadName.trim() || undefined,
+        leadEmail: leadEmail.trim() || undefined,
+      },
+    });
     if ("ok" in res && res.ok) {
       const session = await startFn({
         data: {
           shareLinkId: res.shareLinkId,
           anonId: getOrCreateAnonId(),
           userAgent: navigator.userAgent.slice(0, 500),
+          leadName: leadName.trim() || undefined,
+          leadEmail: leadEmail.trim() || undefined,
         },
       });
       setStatus({ kind: "ready", data: res, sessionId: session.sessionId });
       return;
     }
     if ("error" in res) {
-      if (res.error === "password_required") setStatus({ kind: "password" });
+      if (res.error === "lead_required") setStatus({ kind: "lead" });
+      else if (res.error === "password_required") setStatus({ kind: "password" });
       else if (res.error === "password_wrong")
         setStatus({ kind: "password", wrong: true });
       else if (res.error === "expired")
@@ -105,8 +120,9 @@ function PublicViewer() {
       pageCount: status.data.pageCount,
       initialPage: 0,
       recordFn: (payload) => recordFn(payload),
-      // No dedicated beacon URL; tracker will fall back to a keepalive fetch
-      // wrapping recordFn's own transport on unload.
+      // No dedicated beacon URL; on unload the tracker falls back to firing
+      // recordFn directly as a best-effort call (see finalizeBeacon in
+      // tracker.ts).
     });
     trackerRef.current = tracker;
     tracker.start();
@@ -165,6 +181,64 @@ function PublicViewer() {
           <h1 className="mt-4 text-xl font-semibold">Link unavailable</h1>
           <p className="mt-2 text-sm text-muted-foreground">{status.message}</p>
         </div>
+      </div>
+    );
+  }
+
+  if (status.kind === "lead") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-muted p-6">
+        <form
+          className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 shadow-soft"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            if (!leadName.trim() || !leadEmail.trim()) return;
+            setLeadSubmitting(true);
+            await tryResolve(password).finally(() => setLeadSubmitting(false));
+          }}
+        >
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary-soft text-brand">
+            <Mail className="h-6 w-6" />
+          </div>
+          <h1 className="mt-4 text-center text-lg font-semibold">
+            Please introduce yourself
+          </h1>
+          <p className="mt-1 text-center text-sm text-muted-foreground">
+            Enter your name and email to view this document.
+          </p>
+          <div className="mt-4 space-y-3">
+            <div>
+              <Label htmlFor="leadName">Name</Label>
+              <Input
+                id="leadName"
+                autoFocus
+                value={leadName}
+                onChange={(e) => setLeadName(e.target.value)}
+                placeholder="Jane Cooper"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="leadEmail">Email</Label>
+              <Input
+                id="leadEmail"
+                type="email"
+                value={leadEmail}
+                onChange={(e) => setLeadEmail(e.target.value)}
+                placeholder="jane@example.com"
+                className="mt-1"
+              />
+            </div>
+          </div>
+          <Button
+            type="submit"
+            disabled={leadSubmitting || !leadName.trim() || !leadEmail.trim()}
+            className="mt-4 w-full"
+          >
+            {leadSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+            Continue
+          </Button>
+        </form>
       </div>
     );
   }

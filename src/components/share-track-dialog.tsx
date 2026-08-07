@@ -13,11 +13,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { supabase } from "@/integrations/supabase/client";
 import { saveTrackedPdf, createShareLink } from "@/lib/share.functions";
+import { QrCodeButton } from "@/components/qr-code-button";
 
 type Phase = "signin" | "form" | "saving" | "done";
 
@@ -58,6 +58,7 @@ export function ShareTrackDialog({
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [password, setPassword] = useState("");
   const [expiresAt, setExpiresAt] = useState("");
+  const [requireLeadCapture, setRequireLeadCapture] = useState(false);
   const [savingErr, setSavingErr] = useState<string | null>(null);
   const [result, setResult] = useState<{ url: string; slug: string } | null>(null);
   const [copied, setCopied] = useState(false);
@@ -152,6 +153,7 @@ export function ShareTrackDialog({
             showAdvanced && expiresAt
               ? new Date(expiresAt).toISOString()
               : null,
+          requireLeadCapture,
         },
       });
       const url = `${window.location.origin}/view/${link.slug}`;
@@ -182,6 +184,7 @@ export function ShareTrackDialog({
     setRecipientEmail("");
     setPassword("");
     setExpiresAt("");
+    setRequireLeadCapture(false);
     setShowAdvanced(false);
     setPhase("form");
   }
@@ -273,6 +276,14 @@ export function ShareTrackDialog({
                 Allow recipients to download the PDF
               </label>
 
+              <label className="flex items-center gap-2 text-sm">
+                <Checkbox
+                  checked={requireLeadCapture}
+                  onCheckedChange={(v) => setRequireLeadCapture(!!v)}
+                />
+                Require name &amp; email before viewing
+              </label>
+
               <button
                 type="button"
                 onClick={() => setShowAdvanced((v) => !v)}
@@ -348,6 +359,10 @@ export function ShareTrackDialog({
                   <ExternalLink className="h-3.5 w-3.5" />
                 </a>
               </Button>
+            </div>
+
+            <div className="flex justify-end">
+              <QrCodeButton url={result.url} fileNameHint={label || docName} />
             </div>
 
             <p className="text-xs text-muted-foreground">

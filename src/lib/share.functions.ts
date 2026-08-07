@@ -14,6 +14,75 @@ function makeSlug() {
 }
 
 /**
+ * Per-document engagement summary for the dashboard list: unique viewers,
+ * total sessions, average completion, and the most recent viewing activity,
+ * aggregated across all of a document's share links.
+ */
+export const getDashboardStats = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { documentIds: string[] }) =>
+    z.object({ documentIds: z.array(z.string().uuid()).max(200) }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    const empty = {
+      uniqueViewers: 0,
+      totalSessions: 0,
+      avgCompletion: 0,
+      lastViewed: null as string | null,
+    };
+    if (data.documentIds.length === 0) return {} as Record<string, typeof empty>;
+
+    const { data: links, error: lErr } = await context.supabase
+      .from("share_links")
+      .select("id, document_id")
+      .eq("owner_id", context.userId)
+      .in("document_id", data.documentIds);
+    if (lErr) throw new Error(lErr.message);
+    const linkIds = (links ?? []).map((l) => l.id);
+    const docByLink = new Map((links ?? []).map((l) => [l.id, l.document_id]));
+
+    const stats: Record<string, typeof empty> = {};
+    for (const id of data.documentIds) stats[id] = { ...empty };
+    if (linkIds.length === 0) return stats;
+
+    const [{ data: viewers, error: vErr }, { data: sessions, error: sErr }] =
+      await Promise.all([
+        context.supabase
+          .from("viewers")
+          .select("id, share_link_id")
+          .in("share_link_id", linkIds),
+        context.supabase
+          .from("viewing_sessions")
+          .select("share_link_id, completion_pct, started_at")
+          .in("share_link_id", linkIds),
+      ]);
+    if (vErr) throw new Error(vErr.message);
+    if (sErr) throw new Error(sErr.message);
+
+    for (const v of viewers ?? []) {
+      const docId = docByLink.get(v.share_link_id);
+      if (docId && stats[docId]) stats[docId].uniqueViewers += 1;
+    }
+    const completionSums: Record<string, { sum: number; count: number }> = {};
+    for (const s of sessions ?? []) {
+      const docId = docByLink.get(s.share_link_id);
+      if (!docId || !stats[docId]) continue;
+      stats[docId].totalSessions += 1;
+      const bucket = (completionSums[docId] ??= { sum: 0, count: 0 });
+      bucket.sum += Number(s.completion_pct ?? 0);
+      bucket.count += 1;
+      if (!stats[docId].lastViewed || s.started_at > stats[docId].lastViewed!) {
+        stats[docId].lastViewed = s.started_at;
+      }
+    }
+    for (const docId of Object.keys(stats)) {
+      const bucket = completionSums[docId];
+      stats[docId].avgCompletion = bucket ? bucket.sum / bucket.count : 0;
+    }
+    return stats;
+  });
+
+/**
  * Save the (possibly edited) PDF bytes as a new owned document, uploading to
  * private storage. Called after the guest signs in and clicks "Save & share".
  */
@@ -62,6 +131,7 @@ export const createShareLink = createServerFn({ method: "POST" })
       allowDownload?: boolean;
       expiresAt?: string | null;
       password?: string | null;
+      requireLeadCapture?: boolean;
     }) =>
       z
         .object({
@@ -79,6 +149,7 @@ export const createShareLink = createServerFn({ method: "POST" })
           allowDownload: z.boolean().optional(),
           expiresAt: z.string().datetime().nullable().optional(),
           password: z.string().min(1).max(200).nullable().optional(),
+          requireLeadCapture: z.boolean().optional(),
         })
         .parse(d),
   )
@@ -102,8 +173,11 @@ export const createShareLink = createServerFn({ method: "POST" })
         allow_download: !!data.allowDownload,
         expires_at: data.expiresAt || null,
         password_hash,
+        require_lead_capture: !!data.requireLeadCapture,
       })
-      .select("id, slug, label, allow_download, expires_at, created_at")
+      .select(
+        "id, slug, label, allow_download, expires_at, require_lead_capture, created_at",
+      )
       .single();
     if (error) throw new Error(error.message);
     return link;
@@ -118,7 +192,7 @@ export const listShareLinks = createServerFn({ method: "POST" })
     const { data: links, error } = await context.supabase
       .from("share_links")
       .select(
-        "id, slug, label, recipient_name, recipient_email, allow_download, expires_at, is_active, created_at, password_hash",
+        "id, slug, label, recipient_name, recipient_email, allow_download, expires_at, is_active, require_lead_capture, created_at, password_hash",
       )
       .eq("document_id", data.documentId)
       .order("created_at", { ascending: false });
@@ -155,6 +229,7 @@ export const listShareLinks = createServerFn({ method: "POST" })
       allow_download: l.allow_download,
       expires_at: l.expires_at,
       is_active: l.is_active,
+      require_lead_capture: l.require_lead_capture,
       created_at: l.created_at,
       has_password: !!l.password_hash,
       stats: sessCounts[l.id] ?? { sessions: 0, viewers: 0, totalMs: 0 },
@@ -183,7 +258,7 @@ export const getShareLinkAnalytics = createServerFn({ method: "POST" })
     const { data: link, error: lErr } = await context.supabase
       .from("share_links")
       .select(
-        "id, slug, label, recipient_name, recipient_email, allow_download, expires_at, is_active, created_at, document_id",
+        "id, slug, label, recipient_name, recipient_email, allow_download, expires_at, is_active, require_lead_capture, created_at, document_id",
       )
       .eq("id", data.shareLinkId)
       .single();

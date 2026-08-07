@@ -156,39 +156,50 @@ export function createViewerTracker(opts: TrackerOptions) {
       sequence: sequence++,
       enteredAt: currentEnteredAt,
     });
-    const body = JSON.stringify({
-      data: {
-        sessionId: opts.sessionId,
-        events: queue,
-        lastPage: currentPage,
-        totalActiveMs,
-        uniquePages: uniquePages.size,
-        pageCount: opts.pageCount,
-        ended: true,
-      },
-    });
+    const payload = {
+      sessionId: opts.sessionId,
+      events: queue,
+      lastPage: currentPage,
+      totalActiveMs,
+      uniquePages: uniquePages.size,
+      pageCount: opts.pageCount,
+      ended: true,
+    };
     const url = opts.beaconUrl;
     if (url && typeof navigator !== "undefined" && "sendBeacon" in navigator) {
       try {
-        const blob = new Blob([body], { type: "application/json" });
+        const blob = new Blob([JSON.stringify({ data: payload })], {
+          type: "application/json",
+        });
         navigator.sendBeacon(url, blob);
         return;
       } catch {
         /* fall through */
       }
     }
-    // Best-effort fetch (may be aborted).
     if (url) {
+      // Best-effort fetch to a dedicated beacon endpoint (may be aborted).
       try {
         fetch(url, {
           method: "POST",
           keepalive: true,
           headers: { "content-type": "application/json" },
-          body,
+          body: JSON.stringify({ data: payload }),
         });
       } catch {
         /* ignore */
       }
+      return;
+    }
+    // No dedicated beacon URL configured: fire the recordFn itself as a
+    // best-effort keepalive-style call. This won't survive as reliably as
+    // a true sendBeacon (the browser may still cancel it on some unload
+    // paths), but it's strictly better than dropping the final page's
+    // data on the floor, which is what happened before this fix.
+    try {
+      void opts.recordFn({ data: payload });
+    } catch {
+      /* ignore */
     }
   }
 

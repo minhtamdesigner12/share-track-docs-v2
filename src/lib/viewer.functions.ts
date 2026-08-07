@@ -16,20 +16,28 @@ async function sha256Hex(s: string) {
  * Enforces password and expiration.
  */
 export const resolveShareLink = createServerFn({ method: "POST" })
-  .inputValidator((d: { slug: string; password?: string }) =>
-    z
-      .object({
-        slug: z.string().regex(SLUG_RE),
-        password: z.string().max(200).optional(),
-      })
-      .parse(d),
+  .inputValidator(
+    (d: {
+      slug: string;
+      password?: string;
+      leadName?: string;
+      leadEmail?: string;
+    }) =>
+      z
+        .object({
+          slug: z.string().regex(SLUG_RE),
+          password: z.string().max(200).optional(),
+          leadName: z.string().trim().min(1).max(120).optional(),
+          leadEmail: z.string().trim().max(200).email().optional(),
+        })
+        .parse(d),
   )
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: link, error } = await supabaseAdmin
       .from("share_links")
       .select(
-        "id, document_id, slug, label, allow_download, expires_at, is_active, password_hash",
+        "id, document_id, slug, label, allow_download, expires_at, is_active, password_hash, require_lead_capture",
       )
       .eq("slug", data.slug)
       .maybeSingle();
@@ -37,6 +45,10 @@ export const resolveShareLink = createServerFn({ method: "POST" })
     if (!link || !link.is_active) return { error: "not_found" as const };
     if (link.expires_at && new Date(link.expires_at).getTime() < Date.now())
       return { error: "expired" as const };
+    // Lead capture is checked before the password gate, so a recipient always
+    // identifies themselves first, then unlocks with the password if one is set.
+    if (link.require_lead_capture && (!data.leadName || !data.leadEmail))
+      return { error: "lead_required" as const };
     if (link.password_hash) {
       if (!data.password) return { error: "password_required" as const };
       if ((await sha256Hex(data.password)) !== link.password_hash)
@@ -66,12 +78,20 @@ export const resolveShareLink = createServerFn({ method: "POST" })
 
 export const startViewSession = createServerFn({ method: "POST" })
   .inputValidator(
-    (d: { shareLinkId: string; anonId: string; userAgent?: string }) =>
+    (d: {
+      shareLinkId: string;
+      anonId: string;
+      userAgent?: string;
+      leadName?: string;
+      leadEmail?: string;
+    }) =>
       z
         .object({
           shareLinkId: z.string().uuid(),
           anonId: z.string().min(4).max(80),
           userAgent: z.string().max(500).optional(),
+          leadName: z.string().trim().min(1).max(120).optional(),
+          leadEmail: z.string().trim().max(200).email().optional(),
         })
         .parse(d),
   )
@@ -79,12 +99,20 @@ export const startViewSession = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: link } = await supabaseAdmin
       .from("share_links")
-      .select("id, is_active, expires_at")
+      .select("id, is_active, expires_at, require_lead_capture")
       .eq("id", data.shareLinkId)
       .maybeSingle();
     if (!link || !link.is_active) throw new Error("Invalid link");
     if (link.expires_at && new Date(link.expires_at).getTime() < Date.now())
       throw new Error("Link expired");
+    // If the link requires lead capture, the caller must have already
+    // gone through resolveShareLink's lead_required gate — this is a
+    // defense-in-depth check so a session can't be started without it.
+    if (link.require_lead_capture && (!data.leadName || !data.leadEmail))
+      throw new Error("Name and email are required for this link");
+    // Only set recipient_name/email when provided, so re-visits without a
+    // fresh lead form (e.g. no lead capture required) don't clobber a
+    // previously captured name/email.
     const { data: viewer, error: vErr } = await supabaseAdmin
       .from("viewers")
       .upsert(
@@ -92,6 +120,8 @@ export const startViewSession = createServerFn({ method: "POST" })
           share_link_id: data.shareLinkId,
           anon_id: data.anonId,
           last_seen: new Date().toISOString(),
+          ...(data.leadName ? { recipient_name: data.leadName } : {}),
+          ...(data.leadEmail ? { recipient_email: data.leadEmail } : {}),
         },
         { onConflict: "share_link_id,anon_id" },
       )

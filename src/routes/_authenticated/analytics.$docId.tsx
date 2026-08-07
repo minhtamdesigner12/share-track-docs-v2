@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
+import { QrCodeButton } from "@/components/qr-code-button";
+import { PageHeatmap } from "@/components/page-heatmap";
 import { toast } from "sonner";
 import {
   getSharedDocument,
@@ -193,7 +195,7 @@ function LinkDetail({
             <div className="text-sm font-semibold">{data.link.label}</div>
             <div className="mt-1 truncate text-xs font-mono text-muted-foreground">{url}</div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap justify-end gap-2">
             <Button variant="outline" size="sm" onClick={copyUrl}>
               <Copy className="mr-1 h-3.5 w-3.5" /> Copy
             </Button>
@@ -202,6 +204,7 @@ function LinkDetail({
                 <ExternalLink className="mr-1 h-3.5 w-3.5" /> Open
               </a>
             </Button>
+            <QrCodeButton url={url} fileNameHint={data.link.label ?? undefined} />
           </div>
         </div>
       </div>
@@ -212,6 +215,8 @@ function LinkDetail({
         <Stat icon={<Timer className="h-4 w-4" />} label="Avg active time" value={formatMs(summary.avgMs)} />
         <Stat icon={<Percent className="h-4 w-4" />} label="Avg completion" value={`${summary.avgCompletion.toFixed(0)}%`} />
       </div>
+
+      <PageHeatmap events={data.events} sessions={data.sessions} pageCount={pageCount} />
 
       <div>
         <div className="mb-2 flex items-center gap-2 text-sm font-semibold">

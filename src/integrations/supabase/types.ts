@@ -192,6 +192,7 @@ export type Database = {
           password_hash: string | null
           recipient_email: string | null
           recipient_name: string | null
+          require_lead_capture: boolean
           slug: string
         }
         Insert: {
@@ -206,6 +207,7 @@ export type Database = {
           password_hash?: string | null
           recipient_email?: string | null
           recipient_name?: string | null
+          require_lead_capture?: boolean
           slug: string
         }
         Update: {
@@ -220,6 +222,7 @@ export type Database = {
           password_hash?: string | null
           recipient_email?: string | null
           recipient_name?: string | null
+          require_lead_capture?: boolean
           slug?: string
         }
         Relationships: [
