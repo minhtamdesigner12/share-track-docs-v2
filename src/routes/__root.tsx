@@ -1,4 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+
 import {
   Outlet,
   Link,
@@ -142,6 +144,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+        <GoogleAnalytics />
+
       <Outlet />
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
