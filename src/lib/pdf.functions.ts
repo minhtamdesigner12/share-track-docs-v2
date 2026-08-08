@@ -87,3 +87,51 @@ export const deleteDocument = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/**
+ * Overwrite the stored bytes of an already-owned document with a newly
+ * edited/exported version (from the annotation editor), and update its
+ * page count / size metadata. Existing share links keep working and will
+ * serve the updated content, since they resolve to the same storage path.
+ */
+export const updateDocumentBytes = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (data: { id: string; base64: string; pageCount: number }) =>
+      z
+        .object({
+          id: z.string().uuid(),
+          base64: z.string().min(1),
+          pageCount: z.number().int().min(1),
+        })
+        .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: doc, error: dErr } = await context.supabase
+      .from("pdf_documents")
+      .select("id, source_storage_path")
+      .eq("id", data.id)
+      .single();
+    if (dErr || !doc) throw new Error("Document not found");
+
+    const bytes = Buffer.from(data.base64, "base64");
+    const { error: upErr } = await context.supabase.storage
+      .from("pdfs")
+      .upload(doc.source_storage_path, bytes, {
+        contentType: "application/pdf",
+        upsert: true,
+      });
+    if (upErr) throw new Error(upErr.message);
+
+    const { error: updErr } = await context.supabase
+      .from("pdf_documents")
+      .update({
+        page_count: data.pageCount,
+        size_bytes: bytes.length,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", data.id);
+    if (updErr) throw new Error(updErr.message);
+
+    return { ok: true };
+  });

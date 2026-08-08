@@ -1,38 +1,30 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useState } from "react";
-import {
-  ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
-  Download,
-  Highlighter,
-  MousePointer2,
-  Redo2,
-  Share2,
-  StickyNote,
-  Strikethrough,
-  Undo2,
-} from "lucide-react";
-import { getDocument } from "@/lib/pdf.functions";
-import { PdfPageCanvas } from "@/modules/pdf-render/PdfPageCanvas";
+import { Loader2 } from "lucide-react";
+import { getDocument, updateDocumentBytes } from "@/lib/pdf.functions";
 import { Button } from "@/components/ui/button";
-import { ShareTrackDialog } from "@/components/share-track-dialog";
-import { toast } from "sonner";
+import { EditorProvider } from "@/modules/pdf-doc/store";
+import { EditorShell } from "@/modules/pdf-doc/EditorShell";
 
 export const Route = createFileRoute("/_authenticated/workspace/$docId")({
   component: Workspace,
 });
 
+function uint8ToBase64(bytes: Uint8Array): string {
+  let s = "";
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    s += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  }
+  return btoa(s);
+}
+
 function Workspace() {
   const { docId } = Route.useParams();
-  const navigate = useNavigate();
   const getFn = useServerFn(getDocument);
-  const [page, setPage] = useState(0);
-  const [numPages, setNumPages] = useState(0);
-  const [tool, setTool] = useState<"select" | "highlight" | "strikethrough" | "note">("select");
-  const [shareOpen, setShareOpen] = useState(false);
+  const updateFn = useServerFn(updateDocumentBytes);
+  const qc = useQueryClient();
 
   const { data: doc, isLoading, error } = useQuery({
     queryKey: ["doc", docId],
@@ -40,14 +32,29 @@ function Workspace() {
     staleTime: 60_000,
   });
 
-  useEffect(() => {
-    setPage(0);
-  }, [docId]);
+  // Fetch the actual PDF bytes once we have a signed URL, so the real
+  // editor (with annotation tools) can load it the same way it loads a
+  // fresh guest upload.
+  const { data: bytes, isLoading: bytesLoading, error: bytesError } = useQuery({
+    queryKey: ["doc-bytes", docId, doc?.signedUrl],
+    queryFn: async () => {
+      const res = await fetch(doc!.signedUrl);
+      if (!res.ok) throw new Error("Failed to download PDF");
+      const buf = await res.arrayBuffer();
+      return new Uint8Array(buf);
+    },
+    enabled: !!doc?.signedUrl,
+    staleTime: Infinity,
+  });
 
-  if (isLoading) {
-    return <div className="flex min-h-screen items-center justify-center text-muted-foreground">Loading PDF…</div>;
+  if (isLoading || (doc && bytesLoading)) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-muted-foreground">
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Loading PDF…
+      </div>
+    );
   }
-  if (error || !doc) {
+  if (error || bytesError || !doc || !bytes) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
@@ -61,156 +68,26 @@ function Workspace() {
   }
 
   return (
-    <div className="flex h-screen flex-col bg-background">
-      {/* Top toolbar */}
-      <header className="flex h-14 items-center gap-3 border-b border-border bg-card px-4">
-        <Button variant="ghost" size="sm" onClick={() => navigate({ to: "/dashboard" })}>
-          <ArrowLeft className="mr-1 h-4 w-4" /> Back
-        </Button>
-        <div className="mx-2 h-6 w-px bg-border" />
-        <div className="truncate text-sm font-medium">{doc.name}</div>
-
-        <div className="mx-4 hidden items-center gap-1 rounded-lg border border-border bg-background p-1 md:flex">
-          <ToolBtn active={tool === "select"} onClick={() => setTool("select")} label="Select">
-            <MousePointer2 className="h-4 w-4" />
-          </ToolBtn>
-          <ToolBtn
-            active={tool === "highlight"}
-            onClick={() => {
-              setTool("highlight");
-              toast.info("Annotation tools ship in Phase 2");
-            }}
-            label="Highlight"
-          >
-            <Highlighter className="h-4 w-4" />
-          </ToolBtn>
-          <ToolBtn
-            active={tool === "strikethrough"}
-            onClick={() => {
-              setTool("strikethrough");
-              toast.info("Annotation tools ship in Phase 2");
-            }}
-            label="Strikethrough"
-          >
-            <Strikethrough className="h-4 w-4" />
-          </ToolBtn>
-          <ToolBtn
-            active={tool === "note"}
-            onClick={() => {
-              setTool("note");
-              toast.info("Annotation tools ship in Phase 2");
-            }}
-            label="Note"
-          >
-            <StickyNote className="h-4 w-4" />
-          </ToolBtn>
-          <div className="mx-1 h-5 w-px bg-border" />
-          <ToolBtn onClick={() => toast.info("Undo/redo ships with page edits (Phase 2)")} label="Undo">
-            <Undo2 className="h-4 w-4" />
-          </ToolBtn>
-          <ToolBtn onClick={() => toast.info("Undo/redo ships with page edits (Phase 2)")} label="Redo">
-            <Redo2 className="h-4 w-4" />
-          </ToolBtn>
-        </div>
-
-        <div className="ml-auto flex items-center gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <a href={doc.signedUrl} download={`${doc.name}.pdf`}>
-              <Download className="mr-1 h-4 w-4" /> Download
-            </a>
-          </Button>
-          <Button size="sm" onClick={() => setShareOpen(true)}>
-            <Share2 className="mr-1 h-4 w-4" /> Share
-          </Button>
-        </div>
-      </header>
-
-      <ShareTrackDialog
-        open={shareOpen}
-        onOpenChange={setShareOpen}
-        documentId={doc.id}
+    <EditorProvider>
+      <EditorShell
         docName={doc.name}
+        initialSource={{ id: doc.id, name: doc.name, bytes }}
+        documentId={doc.id}
+        backTo="/dashboard"
+        onSaved={() => {
+          qc.invalidateQueries({ queryKey: ["doc", docId] });
+          qc.invalidateQueries({ queryKey: ["docs"] });
+        }}
+        saveDocument={async (editedBytes, pageCount) => {
+          await updateFn({
+            data: {
+              id: doc.id,
+              base64: uint8ToBase64(editedBytes),
+              pageCount,
+            },
+          });
+        }}
       />
-
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar thumbnails */}
-        <aside className="hidden w-56 shrink-0 overflow-y-auto border-r border-border bg-card p-3 md:block">
-          <div className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Pages
-          </div>
-          <div className="space-y-2">
-            {Array.from({ length: numPages || doc.page_count }).map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setPage(i)}
-                className={
-                  "block w-full overflow-hidden rounded-md border-2 bg-background p-1 transition " +
-                  (i === page ? "border-brand ring-2 ring-brand/20" : "border-border hover:border-brand/50")
-                }
-              >
-                <PdfPageCanvas url={doc.signedUrl} pageIndex={i} className="pointer-events-none" />
-                <div className="pt-1 text-center text-[11px] text-muted-foreground">Page {i + 1}</div>
-              </button>
-            ))}
-          </div>
-        </aside>
-
-        {/* Center viewer */}
-        <div className="flex flex-1 flex-col overflow-hidden">
-          <div className="flex-1 overflow-auto bg-muted p-6">
-            <div className="mx-auto max-w-4xl">
-              <PdfPageCanvas
-                url={doc.signedUrl}
-                pageIndex={page}
-                onNumPages={(n) => setNumPages(n)}
-              />
-            </div>
-          </div>
-          <div className="flex h-12 items-center justify-center gap-3 border-t border-border bg-card">
-            <Button variant="ghost" size="icon" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <div className="text-sm tabular-nums text-muted-foreground">
-              {page + 1} / {numPages || doc.page_count}
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              disabled={numPages > 0 && page >= numPages - 1}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ToolBtn({
-  children,
-  active,
-  onClick,
-  label,
-}: {
-  children: React.ReactNode;
-  active?: boolean;
-  onClick?: () => void;
-  label: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={label}
-      title={label}
-      className={
-        "inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors " +
-        (active ? "bg-primary-soft text-brand" : "text-muted-foreground hover:bg-muted hover:text-foreground")
-      }
-    >
-      {children}
-    </button>
+    </EditorProvider>
   );
 }
