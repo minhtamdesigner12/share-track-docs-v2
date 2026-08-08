@@ -13,6 +13,89 @@ function makeSlug() {
   return crypto.randomUUID().replace(/-/g, "");
 }
 
+function escapeHtml(s: string) {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/**
+ * Email a trackable link to a recipient via Resend. Requires RESEND_API_KEY
+ * (and ideally RESEND_FROM_EMAIL on a verified domain) to be configured —
+ * without a verified domain, Resend only delivers to the account owner's
+ * own address, so this will silently only "work" for the person who signed
+ * up for Resend until a domain is verified there.
+ */
+export const sendShareLinkEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (d: { shareLinkId: string; to: string; recipientName?: string; linkUrl: string; label: string }) =>
+      z
+        .object({
+          shareLinkId: z.string().uuid(),
+          to: z.string().trim().email(),
+          recipientName: z.string().trim().max(120).optional(),
+          linkUrl: z.string().url(),
+          label: z.string().trim().min(1).max(120),
+        })
+        .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    // Ownership check: make sure this link actually belongs to the caller
+    // before we let them send email "from" it.
+    const { data: link, error } = await context.supabase
+      .from("share_links")
+      .select("id")
+      .eq("id", data.shareLinkId)
+      .eq("owner_id", context.userId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!link) throw new Error("Share link not found");
+
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      throw new Error(
+        "Email sending isn't configured yet (missing RESEND_API_KEY). Copy the link manually for now.",
+      );
+    }
+    const from = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
+
+    const greetingName = data.recipientName?.trim() || "there";
+    const html = `
+      <div style="font-family: -apple-system, sans-serif; max-width: 480px; margin: 0 auto; color: #111;">
+        <p>Hi ${escapeHtml(greetingName)},</p>
+        <p>A document was shared with you: <strong>${escapeHtml(data.label)}</strong></p>
+        <p style="margin: 24px 0;">
+          <a href="${data.linkUrl}" style="background:#111;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;display:inline-block;">
+            View document
+          </a>
+        </p>
+        <p style="color:#6b7280;font-size:13px;">Or copy this link: ${data.linkUrl}</p>
+      </div>
+    `;
+
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: data.to,
+        subject: `${data.label} — shared with you`,
+        html,
+      }),
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      throw new Error(`Failed to send email (${res.status}): ${body.slice(0, 200)}`);
+    }
+    return { ok: true };
+  });
+
 /**
  * Per-document engagement summary for the dashboard list: unique viewers,
  * total sessions, average completion, and the most recent viewing activity,

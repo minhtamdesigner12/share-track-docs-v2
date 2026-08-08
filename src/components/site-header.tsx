@@ -39,9 +39,10 @@ export function SiteHeader() {
             <>
               <Link
                 to="/dashboard"
-                className="hidden rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground sm:inline-flex"
+                className="inline-flex items-center rounded-md px-2 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground sm:px-3"
               >
-                My tracked PDFs
+                <span className="sm:hidden">My PDFs</span>
+                <span className="hidden sm:inline">My tracked PDFs</span>
               </Link>
               <span className="hidden text-sm text-muted-foreground md:inline">{email}</span>
               <Button variant="ghost" size="sm" onClick={signOut}>

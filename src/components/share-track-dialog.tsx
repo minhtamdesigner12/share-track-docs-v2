@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, Copy, ExternalLink, Loader2, Lock } from "lucide-react";
+import { Check, Copy, ExternalLink, Loader2, Lock, Mail } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { supabase } from "@/integrations/supabase/client";
-import { saveTrackedPdf, createShareLink } from "@/lib/share.functions";
+import { saveTrackedPdf, createShareLink, sendShareLinkEmail } from "@/lib/share.functions";
 import { QrCodeButton } from "@/components/qr-code-button";
 
 type Phase = "signin" | "form" | "saving" | "done";
@@ -70,11 +70,16 @@ export function ShareTrackDialog({
   const [expiresAt, setExpiresAt] = useState("");
   const [requireLeadCapture, setRequireLeadCapture] = useState(false);
   const [savingErr, setSavingErr] = useState<string | null>(null);
-  const [result, setResult] = useState<{ url: string; slug: string } | null>(null);
+  const [result, setResult] = useState<{ url: string; slug: string; id: string; label: string } | null>(
+    null,
+  );
   const [copied, setCopied] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   const saveFn = useServerFn(saveTrackedPdf);
   const createFn = useServerFn(createShareLink);
+  const sendEmailFn = useServerFn(sendShareLinkEmail);
   const documentIdRef = useRef<string | null>(null);
 
   // Watch auth state (skip entirely when sharing an already-owned document —
@@ -176,11 +181,36 @@ export function ShareTrackDialog({
         },
       });
       const url = `${window.location.origin}/view/${link.slug}`;
-      setResult({ url, slug: link.slug });
+      setResult({ url, slug: link.slug, id: link.id, label: label.trim() });
       setPhase("done");
+      // Auto-send if a recipient email was already provided in the form.
+      if (recipientEmail.trim()) {
+        void doSendEmail(link.id, url, label.trim(), recipientEmail.trim(), recipientName.trim());
+      }
     } catch (e) {
       setSavingErr(e instanceof Error ? e.message : "Failed to create link");
       setPhase("form");
+    }
+  }
+
+  async function doSendEmail(
+    shareLinkId: string,
+    linkUrl: string,
+    linkLabel: string,
+    to: string,
+    name: string,
+  ) {
+    setEmailStatus("sending");
+    setEmailError(null);
+    try {
+      await sendEmailFn({
+        data: { shareLinkId, to, recipientName: name || undefined, linkUrl, label: linkLabel },
+      });
+      setEmailStatus("sent");
+      toast.success(`Emailed to ${to}`);
+    } catch (e) {
+      setEmailStatus("error");
+      setEmailError(e instanceof Error ? e.message : "Failed to send email");
     }
   }
 
@@ -205,6 +235,8 @@ export function ShareTrackDialog({
     setExpiresAt("");
     setRequireLeadCapture(false);
     setShowAdvanced(false);
+    setEmailStatus("idle");
+    setEmailError(null);
     setPhase("form");
   }
 
@@ -384,6 +416,14 @@ export function ShareTrackDialog({
               <QrCodeButton url={result.url} fileNameHint={label || docName} />
             </div>
 
+            <EmailSendRow
+              status={emailStatus}
+              error={emailError}
+              initialEmail={recipientEmail}
+              initialName={recipientName}
+              onSend={(to, name) => doSendEmail(result.id, result.url, result.label, to, name)}
+            />
+
             <p className="text-xs text-muted-foreground">
               Tracking works only when the PDF is viewed through this link. If the recipient
               downloads the PDF and opens it locally, tracking cannot continue.
@@ -423,5 +463,58 @@ function GoogleIcon() {
         d="M12 10.2v3.9h5.5c-.24 1.3-1.6 3.8-5.5 3.8-3.3 0-6-2.75-6-6.15S8.7 5.6 12 5.6c1.9 0 3.15.8 3.87 1.5l2.65-2.55C16.9 3.1 14.7 2.1 12 2.1 6.75 2.1 2.55 6.35 2.55 11.75S6.75 21.4 12 21.4c6.95 0 9.55-4.9 9.55-9.4 0-.63-.07-1.1-.15-1.55L12 10.2z"
       />
     </svg>
+  );
+}
+
+function EmailSendRow({
+  status,
+  error,
+  initialEmail,
+  initialName,
+  onSend,
+}: {
+  status: "idle" | "sending" | "sent" | "error";
+  error: string | null;
+  initialEmail: string;
+  initialName: string;
+  onSend: (to: string, name: string) => void;
+}) {
+  const [to, setTo] = useState(initialEmail);
+  const [name] = useState(initialName);
+
+  return (
+    <div className="space-y-2 rounded-lg border border-border p-3">
+      <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+        <Mail className="h-3.5 w-3.5" /> Email this link
+      </div>
+      <div className="flex gap-2">
+        <Input
+          type="email"
+          placeholder="recipient@example.com"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+          className="flex-1"
+        />
+        <Button
+          size="sm"
+          disabled={status === "sending" || !to.trim()}
+          onClick={() => onSend(to.trim(), name.trim())}
+        >
+          {status === "sending" ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : status === "sent" ? (
+            "Resend"
+          ) : (
+            "Send"
+          )}
+        </Button>
+      </div>
+      {status === "sent" && (
+        <p className="flex items-center gap-1 text-xs text-emerald-600">
+          <Check className="h-3 w-3" /> Sent to {to}
+        </p>
+      )}
+      {status === "error" && error && <p className="text-xs text-destructive">{error}</p>}
+    </div>
   );
 }
