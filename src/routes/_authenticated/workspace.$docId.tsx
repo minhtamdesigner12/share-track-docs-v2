@@ -18,6 +18,7 @@ import {
 import { getDocument } from "@/lib/pdf.functions";
 import { PdfPageCanvas } from "@/modules/pdf-render/PdfPageCanvas";
 import { Button } from "@/components/ui/button";
+import { ShareTrackDialog } from "@/components/share-track-dialog";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/workspace/$docId")({
@@ -31,6 +32,7 @@ function Workspace() {
   const [page, setPage] = useState(0);
   const [numPages, setNumPages] = useState(0);
   const [tool, setTool] = useState<"select" | "highlight" | "strikethrough" | "note">("select");
+  const [shareOpen, setShareOpen] = useState(false);
 
   const { data: doc, isLoading, error } = useQuery({
     queryKey: ["doc", docId],
@@ -117,11 +119,18 @@ function Workspace() {
               <Download className="mr-1 h-4 w-4" /> Download
             </a>
           </Button>
-          <Button size="sm" onClick={() => toast.info("Share & Track ships in Phase 3")}>
+          <Button size="sm" onClick={() => setShareOpen(true)}>
             <Share2 className="mr-1 h-4 w-4" /> Share
           </Button>
         </div>
       </header>
+
+      <ShareTrackDialog
+        open={shareOpen}
+        onOpenChange={setShareOpen}
+        documentId={doc.id}
+        docName={doc.name}
+      />
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar thumbnails */}

@@ -108,11 +108,11 @@ function CompressPage() {
     downloadBytes(bytes, `${name}.pdf`);
   }
 
-  function handleEdit() {
+  async function handleEdit() {
     if (!result || !uploaded) return;
     const bytes = result.notSmaller ? uploaded.bytes : result.bytes;
     const name = result.notSmaller ? uploaded.name : `${uploaded.name}-compressed`;
-    const entry = putGuestPdfBytes(bytes, name);
+    const entry = await putGuestPdfBytes(bytes, name);
     navigate({ to: "/edit", search: { id: entry.id } });
   }
 

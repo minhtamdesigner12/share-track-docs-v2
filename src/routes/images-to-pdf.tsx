@@ -210,9 +210,9 @@ function ImagesToPdfPage() {
     a.remove();
   }
 
-  function handleOpenInEditor() {
+  async function handleOpenInEditor() {
     if (!preview) return;
-    const entry = putGuestPdfBytes(preview.bytes, preview.name);
+    const entry = await putGuestPdfBytes(preview.bytes, preview.name);
     navigate({ to: "/edit", search: { id: entry.id } });
   }
 

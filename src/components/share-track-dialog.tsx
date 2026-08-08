@@ -24,12 +24,21 @@ type Phase = "signin" | "form" | "saving" | "done";
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  /** Async producer for the current edited PDF bytes. */
-  getPdfBytes: () => Promise<Uint8Array>;
-  /** Number of pages currently in the editor. */
-  pageCount: number;
   /** Human-friendly base name (no extension). */
   docName: string;
+  /**
+   * Async producer for the current edited PDF bytes. Required unless
+   * `documentId` is given (i.e. the doc is already saved and owned).
+   */
+  getPdfBytes?: () => Promise<Uint8Array>;
+  /** Number of pages currently in the editor. Required alongside getPdfBytes. */
+  pageCount?: number;
+  /**
+   * If the document is already saved (e.g. opened from the dashboard),
+   * pass its id here to skip the sign-in + save-as-new-document steps
+   * and share it directly.
+   */
+  documentId?: string;
 }
 
 function uint8ToBase64(bytes: Uint8Array): string {
@@ -47,8 +56,9 @@ export function ShareTrackDialog({
   getPdfBytes,
   pageCount,
   docName,
+  documentId,
 }: Props) {
-  const [phase, setPhase] = useState<Phase>("signin");
+  const [phase, setPhase] = useState<Phase>(documentId ? "form" : "signin");
   const [signedIn, setSignedIn] = useState(false);
   const [oauthLoading, setOauthLoading] = useState(false);
   const [label, setLabel] = useState("");
@@ -67,9 +77,10 @@ export function ShareTrackDialog({
   const createFn = useServerFn(createShareLink);
   const documentIdRef = useRef<string | null>(null);
 
-  // Watch auth state
+  // Watch auth state (skip entirely when sharing an already-owned document —
+  // that page is already behind auth, so there's nothing to check).
   useEffect(() => {
-    if (!open) return;
+    if (!open || documentId) return;
     supabase.auth.getUser().then(({ data }) => {
       const authed = !!data.user;
       setSignedIn(authed);
@@ -82,7 +93,7 @@ export function ShareTrackDialog({
     });
     return () => sub.subscription.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, documentId]);
 
   // Default label when entering form
   useEffect(() => {
@@ -96,9 +107,9 @@ export function ShareTrackDialog({
       // keep result if reopened during same edit session? just reset for clarity
       setResult(null);
       setCopied(false);
-      setPhase(signedIn ? "form" : "signin");
+      setPhase(documentId || signedIn ? "form" : "signin");
     }
-  }, [open, signedIn]);
+  }, [open, signedIn, documentId]);
 
   async function handleGoogle() {
     setOauthLoading(true);
@@ -131,14 +142,22 @@ export function ShareTrackDialog({
     }
     setPhase("saving");
     try {
-      // 1. Save PDF (once per dialog session)
+      // 1. Save PDF (once per dialog session) — skipped when sharing an
+      // already-owned document (documentId was passed in directly).
       if (!documentIdRef.current) {
-        const bytes = await getPdfBytes();
-        const base64 = uint8ToBase64(bytes);
-        const saved = await saveFn({
-          data: { name: docName, base64, pageCount },
-        });
-        documentIdRef.current = saved.id;
+        if (documentId) {
+          documentIdRef.current = documentId;
+        } else {
+          if (!getPdfBytes || pageCount == null) {
+            throw new Error("Missing PDF data to save");
+          }
+          const bytes = await getPdfBytes();
+          const base64 = uint8ToBase64(bytes);
+          const saved = await saveFn({
+            data: { name: docName, base64, pageCount },
+          });
+          documentIdRef.current = saved.id;
+        }
       }
       // 2. Create share link
       const link = await createFn({
@@ -349,12 +368,12 @@ export function ShareTrackDialog({
             </DialogHeader>
 
             <div className="flex items-center gap-2 rounded-lg border border-border bg-muted p-3 text-sm">
-              <span className="truncate font-mono text-xs">{result.url}</span>
-              <Button size="sm" variant="outline" onClick={copyLink} className="ml-auto">
+              <span className="min-w-0 flex-1 truncate font-mono text-xs">{result.url}</span>
+              <Button size="sm" variant="outline" onClick={copyLink} className="shrink-0">
                 {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                 <span className="ml-1">{copied ? "Copied" : "Copy"}</span>
               </Button>
-              <Button size="sm" asChild>
+              <Button size="sm" asChild className="shrink-0">
                 <a href={result.url} target="_blank" rel="noreferrer">
                   <ExternalLink className="h-3.5 w-3.5" />
                 </a>
