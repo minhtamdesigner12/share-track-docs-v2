@@ -48,12 +48,10 @@ function AnalyticsPage() {
   const linksFn = useServerFn(listShareLinks);
 
   const { data: doc } = useQuery({
-    enabled: !!docId,
     queryKey: ["shared-doc", docId],
     queryFn: () => docFn({ data: { id: docId } }),
   });
   const { data: links, isLoading } = useQuery({
-    enabled: !!docId,
     queryKey: ["share-links", docId],
     queryFn: () => linksFn({ data: { documentId: docId } }),
     refetchInterval: 15_000,
@@ -121,13 +119,11 @@ function AnalyticsPage() {
             </aside>
 
             {activeLinkId && (
-              const analyticsFn = useServerFn(getShareLinkAnalytics);
               <LinkDetail
                 shareLinkId={activeLinkId}
-                fetchFn={analyticsFn}
+                fetchFn={useServerFn(getShareLinkAnalytics)}
                 pageCount={doc?.page_count ?? 1}
               />
-
             )}
           </div>
         )}
