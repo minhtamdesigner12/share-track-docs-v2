@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
-const GA_ID = "G-X5C3KFFY65"; // Replace with your GA4 Measurement ID
+const GA_ID = "G-X5C3KFFY65";
 
 declare global {
   interface Window {
@@ -11,38 +11,48 @@ declare global {
 }
 
 export function GoogleAnalytics() {
+  useRouterState({
+    select: (state) => state.location,
+  });
+
+  // Load Google Analytics once
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (!document.getElementById("ga-script")) {
+      const script = document.createElement("script");
+      script.id = "ga-script";
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+      document.head.appendChild(script);
+
+      window.dataLayer = window.dataLayer || [];
+
+      window.gtag = (...args: any[]) => {
+        window.dataLayer.push(args);
+      };
+
+      window.gtag("js", new Date());
+
+      window.gtag("config", GA_ID, {
+        send_page_view: false,
+      });
+    }
+  }, []);
+
+  // Track page changes
   const location = useRouterState({
     select: (state) => state.location,
   });
 
-  // Load GA once
   useEffect(() => {
-    if (document.getElementById("ga-script")) return;
-
-    const script = document.createElement("script");
-    script.id = "ga-script";
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-    document.head.appendChild(script);
-
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () {
-      window.dataLayer.push(arguments);
-    };
-
-    window.gtag("js", new Date());
-    window.gtag("config", GA_ID, {
-      send_page_view: false,
-    });
-  }, []);
-
-  // Track page changes
-  useEffect(() => {
+    if (typeof window === "undefined") return;
     if (!window.gtag) return;
 
     window.gtag("event", "page_view", {
-      page_path: location.pathname + location.search,
       page_title: document.title,
+      page_location: window.location.href,
+      page_path: window.location.pathname + window.location.search,
     });
   }, [location]);
 
