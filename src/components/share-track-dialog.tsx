@@ -399,17 +399,21 @@ export function ShareTrackDialog({
               </DialogDescription>
             </DialogHeader>
 
-            <div className="flex items-center gap-2 rounded-lg border border-border bg-muted p-3 text-sm">
-              <span className="min-w-0 flex-1 truncate font-mono text-xs">{result.url}</span>
-              <Button size="sm" variant="outline" onClick={copyLink} className="shrink-0">
-                {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-                <span className="ml-1">{copied ? "Copied" : "Copy"}</span>
-              </Button>
-              <Button size="sm" asChild className="shrink-0">
-                <a href={result.url} target="_blank" rel="noreferrer">
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </a>
-              </Button>
+            <div className="space-y-2.5 rounded-lg border border-border bg-muted p-3 text-sm">
+              <div className="break-all font-mono text-xs leading-relaxed text-foreground">
+                {result.url}
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" onClick={copyLink} className="flex-1">
+                  {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                  <span className="ml-1">{copied ? "Copied" : "Copy"}</span>
+                </Button>
+                <Button size="sm" asChild className="shrink-0">
+                  <a href={result.url} target="_blank" rel="noreferrer">
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                </Button>
+              </div>
             </div>
 
             <div className="flex justify-end">
