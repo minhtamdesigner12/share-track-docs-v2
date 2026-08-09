@@ -82,11 +82,11 @@ function Dashboard() {
               {docs.map((d) => {
                 const s = stats?.[d.id];
                 return (
-                <div key={d.id} className="flex items-center gap-4 px-4 py-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-soft text-brand">
+                <div key={d.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-soft text-brand">
                     <FileText className="h-5 w-5" />
                   </div>
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0 flex-1 basis-full sm:basis-0">
                     <Link
                       to="/workspace/$docId"
                       params={{ docId: d.id }}
@@ -131,31 +131,34 @@ function Dashboard() {
                       </div>
                     </div>
                   </div>
-                  <Button asChild variant="ghost" size="sm">
-                    <Link to="/analytics/$docId" params={{ docId: d.id }}>
-                      <BarChart3 className="mr-1 h-4 w-4" /> Analytics
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline" size="sm">
-                    <Link to="/workspace/$docId" params={{ docId: d.id }}>
-                      Open
-                    </Link>
-                  </Button>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        className="text-destructive focus:text-destructive"
-                        onClick={() => del.mutate(d.id)}
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" /> Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <div className="flex w-full shrink-0 items-center justify-end gap-1.5 sm:w-auto">
+                    <Button asChild variant="ghost" size="sm">
+                      <Link to="/analytics/$docId" params={{ docId: d.id }}>
+                        <BarChart3 className="h-4 w-4 sm:mr-1" />
+                        <span className="hidden sm:inline">Analytics</span>
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" size="sm">
+                      <Link to="/workspace/$docId" params={{ docId: d.id }}>
+                        Open
+                      </Link>
+                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={() => del.mutate(d.id)}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" /> Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
                 );
               })}
