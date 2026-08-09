@@ -46,14 +46,13 @@ function AnalyticsPage() {
   const { docId } = Route.useParams();
   const docFn = useServerFn(getSharedDocument);
   const linksFn = useServerFn(listShareLinks);
+  const analyticsFn = useServerFn(getShareLinkAnalytics);
 
   const { data: doc } = useQuery({
-    enabled: !!docId,
     queryKey: ["shared-doc", docId],
     queryFn: () => docFn({ data: { id: docId } }),
   });
   const { data: links, isLoading } = useQuery({
-    enabled: !!docId,
     queryKey: ["share-links", docId],
     queryFn: () => linksFn({ data: { documentId: docId } }),
     refetchInterval: 15_000,
@@ -121,13 +120,11 @@ function AnalyticsPage() {
             </aside>
 
             {activeLinkId && (
-              const analyticsFn = useServerFn(getShareLinkAnalytics);
               <LinkDetail
                 shareLinkId={activeLinkId}
                 fetchFn={analyticsFn}
                 pageCount={doc?.page_count ?? 1}
               />
-
             )}
           </div>
         )}
@@ -142,7 +139,9 @@ function LinkDetail({
   pageCount,
 }: {
   shareLinkId: string;
-  fetchFn: ReturnType<typeof useServerFn<typeof getShareLinkAnalytics>>;
+  fetchFn: (args: {
+    data: { shareLinkId: string };
+  }) => Promise<Awaited<ReturnType<typeof getShareLinkAnalytics>>>;
   pageCount: number;
 }) {
   const { data, isLoading } = useQuery({
