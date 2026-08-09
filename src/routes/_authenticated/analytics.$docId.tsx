@@ -193,12 +193,12 @@ function LinkDetail({
   return (
     <div className="space-y-6">
       <div className="rounded-xl border border-border bg-card p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
+        <div className="flex flex-wrap items-start gap-3">
+          <div className="min-w-0 w-full sm:w-auto sm:flex-1">
             <div className="text-sm font-semibold">{data.link.label}</div>
-            <div className="mt-1 truncate text-xs font-mono text-muted-foreground">{url}</div>
+            <div className="mt-1 break-all text-xs font-mono text-muted-foreground">{url}</div>
           </div>
-          <div className="flex flex-wrap justify-end gap-2">
+          <div className="flex w-full flex-wrap justify-end gap-2 sm:w-auto">
             <Button variant="outline" size="sm" onClick={copyUrl}>
               <Copy className="mr-1 h-3.5 w-3.5" /> Copy
             </Button>

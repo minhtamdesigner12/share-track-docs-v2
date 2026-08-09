@@ -215,12 +215,18 @@ export function EditorShell({
 
   return (
     <div className="flex h-screen flex-col bg-background">
-      <header className="flex h-14 items-center gap-3 border-b border-border bg-card px-4">
-        <Button variant="ghost" size="sm" onClick={() => navigate({ to: backTo })}>
-          <ArrowLeft className="mr-1 h-4 w-4" /> Back
+      <header className="flex h-14 items-center gap-2 border-b border-border bg-card px-3 sm:gap-3 sm:px-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate({ to: backTo })}
+          className="shrink-0 px-2 sm:px-3"
+        >
+          <ArrowLeft className="h-4 w-4 sm:mr-1" />
+          <span className="hidden sm:inline">Back</span>
         </Button>
-        <div className="mx-2 h-6 w-px bg-border" />
-        <div className="truncate text-sm font-medium">{docName}</div>
+        <div className="mx-1 hidden h-6 w-px bg-border sm:mx-2 sm:block" />
+        <div className="min-w-0 flex-1 truncate text-sm font-medium sm:flex-none">{docName}</div>
 
         <div className="mx-4 hidden items-center gap-1 rounded-lg border border-border bg-background p-1 md:flex">
           <ToolBtn active={tool === "select"} onClick={() => setTool("select")} label="Select">
@@ -275,20 +281,21 @@ export function EditorShell({
           onChange={(e) => handleAddPages(e.target.files)}
         />
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
           {saveDocument && (
             <Button
               size="sm"
               variant="outline"
               onClick={handleSave}
               disabled={saving || state.pages.length === 0}
+              className="px-2 sm:px-3"
             >
               {saving ? (
-                <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin sm:mr-1" />
               ) : (
-                <Save className="mr-1 h-4 w-4" />
+                <Save className="h-4 w-4 sm:mr-1" />
               )}
-              Save changes
+              <span className="hidden sm:inline">Save changes</span>
             </Button>
           )}
           <Button
@@ -296,17 +303,23 @@ export function EditorShell({
             variant="outline"
             onClick={() => setShareOpen(true)}
             disabled={state.pages.length === 0}
+            className="px-2 sm:px-3"
           >
-            <Share2 className="mr-1 h-4 w-4" />
-            Share &amp; Track
+            <Share2 className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Share &amp; Track</span>
           </Button>
-          <Button size="sm" onClick={handleDownload} disabled={exporting || state.pages.length === 0}>
+          <Button
+            size="sm"
+            onClick={handleDownload}
+            disabled={exporting || state.pages.length === 0}
+            className="px-2 sm:px-3"
+          >
             {exporting ? (
-              <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin sm:mr-1" />
             ) : (
-              <Download className="mr-1 h-4 w-4" />
+              <Download className="h-4 w-4 sm:mr-1" />
             )}
-            Download
+            <span className="hidden sm:inline">Download</span>
           </Button>
         </div>
       </header>

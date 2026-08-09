@@ -111,13 +111,8 @@ export function PageHeatmap({ events, sessions, pageCount }: Props) {
         <div className="mb-2 flex items-center gap-2 text-sm font-semibold">
           <Flame className="h-4 w-4" /> Page engagement heatmap
         </div>
-        <div className="rounded-xl border border-border bg-card p-4">
-          <div
-            className="grid gap-1"
-            style={{
-              gridTemplateColumns: `repeat(${Math.min(pageCount, 40)}, minmax(0, 1fr))`,
-            }}
-          >
+        <div className="overflow-x-auto rounded-xl border border-border bg-card p-4">
+          <div className="flex flex-wrap gap-1">
             {perPage.map((p) => {
               const intensity = p.activeMs / maxMs;
               const reachPct = totalSessions ? (p.reachedCount / totalSessions) * 100 : 0;
@@ -128,7 +123,7 @@ export function PageHeatmap({ events, sessions, pageCount }: Props) {
                       type="button"
                       onMouseEnter={() => setHovered(p.pageIndex)}
                       onMouseLeave={() => setHovered(null)}
-                      className="aspect-square w-full rounded-[3px] transition-transform hover:z-10 hover:scale-125"
+                      className="h-7 w-7 shrink-0 rounded-[3px] transition-transform hover:z-10 hover:scale-125 sm:h-8 sm:w-8"
                       style={{
                         backgroundColor: heatColor(intensity),
                         outline: hovered === p.pageIndex ? "2px solid var(--brand)" : "none",
