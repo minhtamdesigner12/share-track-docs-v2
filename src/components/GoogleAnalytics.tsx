@@ -1,60 +1,62 @@
 import { useEffect } from "react";
-import { useRouterState } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 
-const GA_ID = "G-X5C3KFFY65";
+const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined;
 
 declare global {
   interface Window {
-    dataLayer: any[];
-    gtag: (...args: any[]) => void;
+    dataLayer: unknown[];
+    gtag: (...args: unknown[]) => void;
   }
 }
 
+/**
+ * Loads Google Analytics (GA4) once, and reports a page_view on every
+ * client-side route change — not just the very first load. TanStack Router
+ * navigates without a full page reload, so without this second effect GA
+ * would only ever see a single pageview no matter how many pages someone
+ * actually visits in a session.
+ *
+ * Only runs in production builds, and only if VITE_GA_MEASUREMENT_ID is
+ * set, so local dev traffic never pollutes real analytics.
+ */
 export function GoogleAnalytics() {
-  useRouterState({
-    select: (state) => state.location,
-  });
+  const router = useRouter();
 
-  // Load Google Analytics once
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (!GA_ID || !import.meta.env.PROD) return;
+    if (document.getElementById("ga-gtag-script")) return;
 
-    if (!document.getElementById("ga-script")) {
-      const script = document.createElement("script");
-      script.id = "ga-script";
-      script.async = true;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-      document.head.appendChild(script);
+    const script = document.createElement("script");
+    script.id = "ga-gtag-script";
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+    document.head.appendChild(script);
 
-      window.dataLayer = window.dataLayer || [];
-
-      window.gtag = (...args: any[]) => {
-        window.dataLayer.push(args);
-      };
-
-      window.gtag("js", new Date());
-
-      window.gtag("config", GA_ID, {
-        send_page_view: false,
-      });
-    }
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function gtag(...args: unknown[]) {
+      window.dataLayer.push(args);
+    };
+    window.gtag("js", new Date());
+    // The router-change effect below sends page_view on every navigation,
+    // including the first one, so we skip GA's automatic initial pageview
+    // here to avoid double-counting it.
+    window.gtag("config", GA_ID, { send_page_view: false });
   }, []);
 
-  // Track page changes
-  const location = useRouterState({
-    select: (state) => state.location,
-  });
-
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!window.gtag) return;
-
-    window.gtag("event", "page_view", {
-      page_title: document.title,
-      page_location: window.location.href,
-      page_path: window.location.pathname + window.location.search,
-    });
-  }, [location]);
+    if (!GA_ID || !import.meta.env.PROD) return;
+    const send = () => {
+      if (typeof window.gtag !== "function") return;
+      window.gtag("event", "page_view", {
+        page_path: window.location.pathname + window.location.search,
+        page_location: window.location.href,
+      });
+    };
+    // Fire once for the current page, then on every subsequent navigation.
+    send();
+    return router.history.subscribe(send);
+  }, [router]);
 
   return null;
 }

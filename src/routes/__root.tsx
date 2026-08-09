@@ -1,6 +1,4 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { GoogleAnalytics } from "@/components/GoogleAnalytics";
-
 import {
   Outlet,
   Link,
@@ -15,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportError } from "../lib/error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 
 function NotFoundComponent() {
   return (
@@ -40,9 +39,8 @@ function NotFoundComponent() {
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
-
   const router = useRouter();
-  const [retried, setRetried] = useState(false);
+  const [retrying, setRetrying] = useState(true);
 
   useEffect(() => {
     reportError(error, {
@@ -50,30 +48,55 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     });
   }, [error]);
 
-  // Auto retry once
+  // Auto-retry once for what's often a transient blip (a slow cold start,
+  // a flaky network request) before showing a real error. A timestamped
+  // flag in sessionStorage prevents looping forever if it keeps failing.
   useEffect(() => {
-    if (retried) return;
+    const KEY = "__errRetryAt";
+    const now = Date.now();
+    let last = 0;
+    try {
+      last = parseInt(sessionStorage.getItem(KEY) || "0", 10);
+    } catch {
+      /* sessionStorage unavailable — treat as no prior retry */
+    }
+    if (now - last > 8000) {
+      try {
+        sessionStorage.setItem(KEY, String(now));
+      } catch {
+        /* ignore */
+      }
+      const t = setTimeout(() => {
+        router.invalidate();
+        reset();
+      }, 900);
+      return () => clearTimeout(t);
+    }
+    setRetrying(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    const timer = setTimeout(() => {
-      setRetried(true);
-      router.invalidate();
-      reset();
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [retried, router, reset]);
+  if (retrying) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+        <div className="max-w-md text-center">
+          <div className="mx-auto mb-5 h-8 w-8 animate-spin rounded-full border-[3px] border-muted border-t-brand" />
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">Just a moment</h1>
+          <p className="mt-2 text-sm text-muted-foreground">Getting things ready…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          Loading...
+          This page didn't load
         </h1>
-
         <p className="mt-2 text-sm text-muted-foreground">
-          Retrying automatically...
+          Something went wrong on our end. You can try refreshing or head back home.
         </p>
-
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -84,7 +107,6 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           >
             Try again
           </button>
-
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
@@ -163,8 +185,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-        <GoogleAnalytics />
-
+      <GoogleAnalytics />
       <Outlet />
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
