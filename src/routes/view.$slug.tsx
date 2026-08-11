@@ -288,7 +288,7 @@ function PublicViewer() {
 
   return (
     <div className="flex h-screen flex-col bg-neutral-900 text-neutral-100">
-      <header className="flex h-12 items-center gap-3 border-b border-neutral-800 bg-neutral-900/80 px-4 backdrop-blur">
+      <header className="sticky top-0 z-10 flex h-12 shrink-0 items-center gap-3 border-b border-neutral-800 bg-neutral-900/80 px-4 backdrop-blur">
         <FileText className="h-4 w-4 text-neutral-400" />
         <div className="truncate text-sm font-medium">{data.docName}</div>
         <div className="ml-auto flex items-center gap-2">
@@ -322,7 +322,7 @@ function PublicViewer() {
         </div>
       </div>
 
-      <footer className="flex h-14 items-center justify-center gap-4 border-t border-neutral-800 bg-neutral-900/80 backdrop-blur">
+      <footer className="flex h-14 shrink-0 items-center justify-center gap-4 border-t border-neutral-800 bg-neutral-900/80 backdrop-blur">
         <Button
           variant="ghost"
           size="icon"
