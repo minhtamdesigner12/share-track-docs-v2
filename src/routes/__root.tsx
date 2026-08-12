@@ -124,19 +124,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "iEduPDF — Edit, share, and track PDFs" },
+      { title: "iEduPDF — Share PDFs with Trackable Links & Analytics" },
       {
         name: "description",
         content:
-          "Everything you need to work with PDFs. Edit, organize, compress, create, and share with detailed engagement tracking.",
+          "Turn any PDF into a trackable link. See exactly which pages recipients view and how long they spend — built for pitch decks, proposals, and sales documents. Free to start, no account required to view.",
       },
-      { property: "og:title", content: "iEduPDF — Edit, share, and track PDFs" },
+      { name: "robots", content: "index, follow" },
+      { property: "og:title", content: "iEduPDF — Share PDFs with Trackable Links & Analytics" },
       {
         property: "og:description",
         content:
-          "Everything you need to work with PDFs. Edit, organize, compress, create, and share with detailed engagement tracking.",
+          "Turn any PDF into a trackable link. See exactly which pages recipients view and how long they spend — built for pitch decks, proposals, and sales documents.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://iedupdf.com" },
+      { property: "og:site_name", content: "iEduPDF" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
@@ -148,6 +151,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "canonical", href: "https://iedupdf.com" },
     ],
   }),
   shellComponent: RootShell,

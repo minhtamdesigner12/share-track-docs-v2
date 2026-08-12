@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /view/
+Disallow: /dashboard
+Disallow: /analytics/
+Disallow: /workspace/
+Disallow: /edit
+Disallow: /auth
+
+Sitemap: https://iedupdf.com/sitemap.xml

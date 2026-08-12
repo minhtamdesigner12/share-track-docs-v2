@@ -322,7 +322,7 @@ function PublicViewer() {
         </div>
       </div>
 
-      <footer className="flex h-14 shrink-0 items-center justify-center gap-4 border-t border-neutral-800 bg-neutral-900/80 backdrop-blur">
+      <footer className="relative flex h-14 shrink-0 items-center justify-center gap-4 border-t border-neutral-800 bg-neutral-900/80 backdrop-blur">
         <Button
           variant="ghost"
           size="icon"
@@ -344,6 +344,14 @@ function PublicViewer() {
         >
           <ChevronRight className="h-5 w-5" />
         </Button>
+        <a
+          href="https://tamplaylab.com"
+          target="_blank"
+          rel="noreferrer"
+          className="absolute right-4 hidden items-center gap-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-200 sm:flex"
+        >
+          Powered by <span className="font-semibold text-neutral-200">tamplaylab.com</span>
+        </a>
       </footer>
     </div>
   );
