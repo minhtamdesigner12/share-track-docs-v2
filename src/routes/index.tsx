@@ -125,7 +125,15 @@ function Home() {
       <footer className="border-t border-border/60 py-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 text-sm text-muted-foreground sm:flex-row">
           <div>© {new Date().getFullYear()} iEduPDF</div>
-          <div>Simple PDF tools with real engagement tracking.</div>
+
+          <a
+            href="https://tamplaylab.com"
+            target="_blank"
+            rel="noreferrer"
+            className="transition-colors hover:text-foreground"
+          >
+            Powered by <span className="font-semibold">tamplaylab.com</span>
+          </a>
         </div>
       </footer>
     </div>
