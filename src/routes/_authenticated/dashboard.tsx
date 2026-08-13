@@ -6,6 +6,7 @@ import { BarChart3, FileText, MoreHorizontal, Trash2, Users, Percent } from "luc
 import { SiteHeader } from "@/components/site-header";
 import { PdfUpload } from "@/components/pdf-upload";
 import { Button } from "@/components/ui/button";
+import { PoweredByFooter } from "@/components/powered-by-footer";
 import { listMyDocuments, deleteDocument } from "@/lib/pdf.functions";
 import { getDashboardStats } from "@/lib/share.functions";
 import { toast } from "sonner";
@@ -166,6 +167,7 @@ function Dashboard() {
           )}
         </div>
       </main>
+      <PoweredByFooter />
     </div>
   );
 }

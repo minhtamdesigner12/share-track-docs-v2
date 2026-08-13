@@ -20,6 +20,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { QrCodeButton } from "@/components/qr-code-button";
 import { PageHeatmap } from "@/components/page-heatmap";
+import { PoweredByFooter } from "@/components/powered-by-footer";
 import { toast } from "sonner";
 import {
   getSharedDocument,
@@ -129,6 +130,7 @@ function AnalyticsPage() {
           </div>
         )}
       </main>
+      <PoweredByFooter />
     </div>
   );
 }
