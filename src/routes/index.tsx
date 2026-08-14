@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { GuestPdfUpload } from "@/components/guest-pdf-upload";
+import { PoweredByFooter } from "@/components/powered-by-footer";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -122,20 +123,7 @@ function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-border/60 py-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 text-sm text-muted-foreground sm:flex-row">
-          <div>© {new Date().getFullYear()} iEduPDF</div>
-
-          <a
-            href="https://tamplaylab.com"
-            target="_blank"
-            rel="noreferrer"
-            className="transition-colors hover:text-foreground"
-          >
-            Powered by <span className="font-semibold">tamplaylab.com</span>
-          </a>
-        </div>
-      </footer>
+      <PoweredByFooter />
     </div>
   );
 }
